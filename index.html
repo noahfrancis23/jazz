@@ -83,6 +83,7 @@ footer .wm{justify-content:center;margin:0 0 10px}
 .hero .sub{text-align:center}.wm{letter-spacing:.2em;font-size:.72rem}
 .mk span{transform:translateX(calc(-100% - 6px))}.mk.goal span{transform:translateX(6px)}
 .bg{display:grid;grid-template-columns:1fr;gap:10px}@media(min-width:760px){.bg{grid-template-columns:1fr 1fr}}.bm{border:1px solid var(--line);background:var(--ink)}.bh{font:600 .7rem Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);padding:6px 10px;border-bottom:1px solid var(--line)}.bt{display:flex;gap:10px;align-items:center;padding:8px 10px;font-weight:600}.bt .sd{width:18px;color:var(--sky)}.bt .rec{margin-left:auto;color:var(--mute);font-variant-numeric:tabular-nums}.bt.jz{background:var(--mp)}.bt3{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.15em;font-size:.9rem;color:var(--sky);margin:16px 0 8px}
+.pst{font-size:.8rem;font-weight:700;margin-top:8px;letter-spacing:.03em}.pst.ahead{color:#4ade80}.pst.behind{color:#f87171}.pst.behind b{color:#fff}.pst.onpace{color:var(--sky)}
 </style></head><body>
 <div id="demo" class="demo" hidden>⚠ DEMO DATA: FAKE RESULTS FOR TESTING ONLY ⚠</div>
 <header class="hero"><svg class="mtn" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true"><path d="M0 300V190l140-90 90 55 160-125 120 95 80-50 170 130 110-70 150 85 90-45 90 50v165z" fill="#ffffff" opacity=".05"/><path d="M0 300V240l180-70 120 50 190-110 150 100 120-55 160 80 140-60 140 55v70z" fill="#000" opacity=".55"/></svg>
@@ -105,7 +106,7 @@ footer .wm{justify-content:center;margin:0 0 10px}
  <section><h2>West Standings</h2><div style="overflow-x:auto"><table class="stand" id="stand"></table></div><p class="snote" id="snote"></p><p style="font-size:.85rem;opacity:.85;margin:10px 0 0"><b>Why 45 wins?</b> The top 6 seeds in the West make the playoffs outright; 7 through 10 go to the play-in. In recent seasons the West's 6th seed has usually finished in the mid-to-high 40s, so 45 wins puts the Jazz right in the race for a top-6 spot and comfortably in the play-in at worst.</p></section>
  <section><h2>Pace Chart</h2><div id="chart"></div>
   <div style="font-size:.8rem;opacity:.8">Sky blue = actual wins · dashed white = 45-win pace · dotted purple = 36.5 Vegas pace</div></section>
- <section><h2>Circled Games Scorecard</h2><div class="defs" style="font-size:.85rem;line-height:1.5;margin:0 0 14px;opacity:.9"><b>How games are labeled</b> (opponent tier is set by its Vegas win total; see Opponent Tiers below):<br><b>MUST-WIN</b> · home vs Peer teams, or any game vs Weak teams<br><b>SWING</b> · home vs Playoff teams, or road vs Peer or Playoff teams<br><b>STEAL</b> · any game vs a Contender, home or road</div><div class="cards" id="cards"></div>
+ <section><h2>Circled Games Scorecard</h2><div class="defs" style="font-size:.85rem;line-height:1.5;margin:0 0 14px;opacity:.9"><b>How games are labeled</b> (opponent tier is set by its Vegas win total; see Opponent Tiers below):<br><b>MUST-WIN</b> · home vs Peer teams, or any game vs Weak teams<br><b>SWING</b> · home vs Playoff teams, or road vs Peer or Playoff teams<br><b>STEAL</b> · any game vs a Contender, home or road</div><div class="cards" id="cards"></div><p id="bank" style="font-size:.9rem;margin:12px 0 0"></p>
   <p style="font-size:.85rem;opacity:.8;margin-bottom:0"><b>The 45-win plan:</b> go 25-6 in MUST-WIN games, 17-19 in SWING games, and 3-10 in STEAL games. That's 45 wins. Every MUST-WIN dropped has to be made up with an extra SWING or STEAL win. (2 NBA Cup games are still TBD and not counted yet.)</p></section>
  <section><h2>Next Must-Win Game</h2><div id="next"></div></section>
  <section><h2>Upset Alert Wall</h2><div class="wall" id="wall"></div></section>
@@ -164,10 +165,18 @@ $('meter').insertAdjacentHTML('beforeend',`<div class="mk" style="left:0;border:
  $('chart').innerHTML=s+'</svg>'})();
 // scorecard
 const EX={'MUST-WIN':'Home vs Peer teams, and any game vs Weak teams. A 45-win team takes care of these.','SWING':'Home vs Playoff teams, and road games vs Peer or Playoff teams. Coin flips; this is where 45 is won or lost.','STEAL':'Games vs Contenders. Nobody expects these, so every win is a bonus.'},PLAN={'MUST-WIN':'go 25-6','SWING':'go 17-19','STEAL':'go 3-10'};
-$('cards').innerHTML=['MUST-WIN','SWING','STEAL'].map(k=>{const all=G.filter(g=>g.category===k),p=all.filter(g=>g.result),w=p.filter(g=>g.result.w).length;
- return `<div class="card c-${k}"><span class="tag t-${k}">${k}</span><div class="num">${w}-${p.length-w}</div><div style="font-size:.8rem;opacity:.75">${all.length} games · ${all.length-p.length} left · plan: ${PLAN[k]}</div><p>${EX[k]}</p><div style="font-size:.75rem;color:var(--sky);margin-top:6px">Tap to see games ›</div></div>`}).join('');
-// next circled game
 const fmt=g=>`${g.home?'vs':'@'} ${g.opponent}`;
+const TGT={'MUST-WIN':25,'SWING':17,'STEAL':3};let bank=0;
+const dt=g=>new Date(g.date+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+$('cards').innerHTML=['MUST-WIN','SWING','STEAL'].map(k=>{const all=G.filter(g=>g.category===k),p=all.filter(g=>g.result),w=p.filter(g=>g.result.w).length;
+ const exp=p.length*TGT[k]/all.length,diff=w-exp;bank+=diff;
+ let st='';if(p.length){const nx=all.find(g=>!g.result);
+  if(diff>=0.5)st=`<div class="pst ahead">▲ AHEAD by ${diff.toFixed(1)} wins, banked for the other goals</div>`;
+  else if(diff<=-0.5)st=`<div class="pst behind">▼ BEHIND by ${(-diff).toFixed(1)} wins${nx?` · next chance to get back on track: <b>${fmt(nx)}, ${dt(nx)}</b>`:''}</div>`;
+  else st=`<div class="pst onpace">● ON PACE</div>`}
+ return `<div class="card c-${k}"><span class="tag t-${k}">${k}</span><div class="num">${w}-${p.length-w}</div><div style="font-size:.8rem;opacity:.75">${all.length} games · ${all.length-p.length} left · plan: ${PLAN[k]}</div>${st}<p>${EX[k]}</p><div style="font-size:.75rem;color:var(--sky);margin-top:6px">Tap to see games ›</div></div>`}).join('');
+$('bank').innerHTML=P.length?(bank>=0.5?`<b>Win bank: +${bank.toFixed(1)}</b>. The Jazz are ahead of the 45-win plan overall, so they can afford that many misses elsewhere.`:bank<=-0.5?`<b>Win bank: ${bank.toFixed(1)}</b>. The Jazz are behind the 45-win plan overall and need extra wins to make it up.`:`<b>Win bank: 0</b>. Right on the 45-win plan.`):'<b>Win bank:</b> starts at 0. Wins beyond the plan in any category get banked here to cover misses in the others.';
+// next circled game
 function card(id,nxt,label,cdid){
 if(!nxt){$(id).innerHTML='<p class="empty">No '+label+' left.</p>';return}
 $(id).innerHTML=`<div class="next"><div><span class="tag t-${nxt.category}">${nxt.category}</span><div class="num" style="font-size:2.2rem;margin-top:6px">${fmt(nxt)}</div><div style="color:#ffffffcc;font-size:.88rem">Game ${nxt.game_no} · ${nxt.day} ${new Date(nxt.date+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${nxt.tip_mt} MT · ${nxt.tier} (O/U ${nxt.opp_win_total})</div></div><div class="cd" id="${cdid}"></div></div>`;

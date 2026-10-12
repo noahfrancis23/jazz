@@ -82,6 +82,7 @@ footer .wm{justify-content:center;margin:0 0 10px}
 .snote{font-size:.8rem;color:var(--mute);margin:10px 0 0}
 .hero .sub{text-align:center}.wm{letter-spacing:.2em;font-size:.72rem}
 .mk span{transform:translateX(calc(-100% - 6px))}.mk.goal span{transform:translateX(6px)}
+.bg{display:grid;grid-template-columns:1fr;gap:10px}@media(min-width:760px){.bg{grid-template-columns:1fr 1fr}}.bm{border:1px solid var(--line);background:var(--ink)}.bh{font:600 .7rem Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);padding:6px 10px;border-bottom:1px solid var(--line)}.bt{display:flex;gap:10px;align-items:center;padding:8px 10px;font-weight:600}.bt .sd{width:18px;color:var(--sky)}.bt .rec{margin-left:auto;color:var(--mute);font-variant-numeric:tabular-nums}.bt.jz{background:var(--mp)}.bt3{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.15em;font-size:.9rem;color:var(--sky);margin:16px 0 8px}
 </style></head><body>
 <div id="demo" class="demo" hidden>⚠ DEMO DATA: FAKE RESULTS FOR TESTING ONLY ⚠</div>
 <header class="hero"><svg class="mtn" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true"><path d="M0 300V190l140-90 90 55 160-125 120 95 80-50 170 130 110-70 150 85 90-45 90 50v165z" fill="#ffffff" opacity=".05"/><path d="M0 300V240l180-70 120 50 190-110 150 100 120-55 160 80 140-60 140 55v70z" fill="#000" opacity=".55"/></svg>
@@ -100,6 +101,7 @@ footer .wm{justify-content:center;margin:0 0 10px}
  </div>
 </header>
 <main class="wrap">
+ <section><h2>Next Game</h2><div id="nextany"></div></section>
  <section><h2>West Standings</h2><div style="overflow-x:auto"><table class="stand" id="stand"></table></div><p class="snote" id="snote"></p></section>
  <section><h2>Pace Chart</h2><div id="chart"></div>
   <div style="font-size:.8rem;opacity:.8">Sky blue = actual wins · dashed white = 45-win pace · dotted purple = 36.5 Vegas pace</div></section>
@@ -119,6 +121,7 @@ footer .wm{justify-content:center;margin:0 0 10px}
  </div>
  <p style="font-size:.85rem;opacity:.8;margin-bottom:0">Tags: <span class="pill">B2B</span> second night of a back-to-back · <span class="pill">WEST PEER</span> West rival for tiebreakers and the play-in · Upset = any STEAL win, or a win over a Playoff/Contender team (higher tier than the Jazz).</p></section>
 </main>
+<section><h2>If the Season Ended Today</h2><p id="jzline" style="margin-top:0"></p><div id="bracket"></div></section>
 <footer><div class="wm">UTAH JAZZ <b>·</b> TAKE NOTE</div>Unofficial fan tracker. Win totals: DraftKings preseason.<br>Last updated: <span id="upd"></span><p style="font-size:.8rem;opacity:.75;margin:10px 0 0">Created by Noah Francis · <a href="mailto:noahfrancis99@gmail.com" style="color:inherit">noahfrancis99@gmail.com</a></p></footer>
 <canvas id="confetti"></canvas><div id="banner"><div>🚨 UPSET ALERT 🚨<small id="bannerSub"></small></div></div>
 <script src="data.js"></script>
@@ -165,10 +168,22 @@ $('cards').innerHTML=['MUST-WIN','SWING','STEAL'].map(k=>{const all=G.filter(g=>
  return `<div class="card c-${k}"><span class="tag t-${k}">${k}</span><div class="num">${w}-${p.length-w}</div><div style="font-size:.8rem;opacity:.75">${all.length} games · ${all.length-p.length} left · plan: ${PLAN[k]}</div><p>${EX[k]}</p></div>`}).join('');
 // next circled game
 const fmt=g=>`${g.home?'vs':'@'} ${g.opponent}`;
-const nxt=G.find(g=>!g.result&&g.category!=='OTHER'&&new Date(g.tip_iso)>new Date());
-if(!nxt)$('next').innerHTML='<p class="empty">No circled games left.</p>';else{
- $('next').innerHTML=`<div class="next"><div><span class="tag t-${nxt.category}">${nxt.category}</span><div class="num" style="font-size:2.2rem;margin-top:6px">${fmt(nxt)}</div><div style="color:#ffffffcc;font-size:.88rem">Game ${nxt.game_no} · ${nxt.day} ${new Date(nxt.date+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${nxt.tip_mt} MT · ${nxt.tier} (O/U ${nxt.opp_win_total})</div></div><div class="cd" id="cd"></div></div>`;
- const tick=()=>{let t=Math.max(0,new Date(nxt.tip_iso)-new Date())/1000;const u=[[86400,'DAYS'],[3600,'HRS'],[60,'MIN'],[1,'SEC']].map(([d,l])=>{const v=Math.floor(t/d);t-=v*d;return `<div><div class="num">${String(v).padStart(2,'0')}</div><small>${l}</small></div>`});$('cd').innerHTML=u.join('')};tick();setInterval(tick,1000)}
+function card(id,nxt,label,cdid){
+if(!nxt){$(id).innerHTML='<p class="empty">No '+label+' left.</p>';return}
+$(id).innerHTML=`<div class="next"><div><span class="tag t-${nxt.category}">${nxt.category}</span><div class="num" style="font-size:2.2rem;margin-top:6px">${fmt(nxt)}</div><div style="color:#ffffffcc;font-size:.88rem">Game ${nxt.game_no} · ${nxt.day} ${new Date(nxt.date+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${nxt.tip_mt} MT · ${nxt.tier} (O/U ${nxt.opp_win_total})</div></div><div class="cd" id="${cdid}"></div></div>`;
+const tick=()=>{let t=Math.max(0,new Date(nxt.tip_iso)-new Date())/1000;const u=[[86400,'DAYS'],[3600,'HRS'],[60,'MIN'],[1,'SEC']].map(([d,l])=>{const v=Math.floor(t/d);t-=v*d;return `<div><div class="num">${String(v).padStart(2,'0')}</div><small>${l}</small></div>`});$(cdid).innerHTML=u.join('')};tick();setInterval(tick,1000)}
+card('next',G.find(g=>!g.result&&g.category!=='OTHER'&&new Date(g.tip_iso)>new Date()),'circled games','cd');
+card('nextany',G.find(g=>!g.result&&new Date(g.tip_iso)>new Date()),'games','cd2');
+// playoff picture
+(()=>{const T=((D.standings||{}).teams||[]).slice().sort((a,b)=>a.seed-b.seed);if(T.length<10){$('bracket').innerHTML='<p class="empty">Standings not available yet.</p>';return}
+const nm=i=>{const t=T[i-1];const j=/Utah/.test(t.team);return `<div class="bt${j?' jz':''}"><span class="sd">${i}</span>${t.team}<span class="rec">${t.w}-${t.l}</span></div>`};
+const m=(a,b,t)=>`<div class="bm"><div class="bh">${t}</div>${nm(a)}${nm(b)}</div>`;
+const pre=T.every(t=>t.w+t.l===0);
+$('bracket').innerHTML=(pre?'<p class="snote">Preseason: every team is 0-0, so seeds are placeholders until games are played.</p>':'')+
+'<h3 class="bt3">Play-In</h3><div class="bg">'+m(7,8,'7 vs 8 · winner is the 7 seed')+m(9,10,'9 vs 10 · loser is out')+'</div><p class="snote">The loser of 7 vs 8 plays the winner of 9 vs 10 for the 8 seed.</p>'+
+'<h3 class="bt3">First Round</h3><div class="bg">'+m(1,8,'1 vs 8')+m(4,5,'4 vs 5')+m(3,6,'3 vs 6')+m(2,7,'2 vs 7')+'</div>';
+const ji=T.findIndex(t=>/Utah/.test(t.team))+1;
+$('jzline').innerHTML=pre?'':ji<=6?`If the season ended today, the Jazz are the <b>${ji} seed</b> and in the playoffs.`:ji<=10?`If the season ended today, the Jazz are the <b>${ji} seed</b> and in the play-in.`:`If the season ended today, the Jazz are <b>${ji}th</b> and out of the play-in.`})();
 // upset wall
 const ups=P.filter(g=>g.result.upset);
 $('wall').innerHTML=ups.length?ups.slice().reverse().map(g=>`<div class="up"><span class="tag t-${g.category}">${g.category==='STEAL'?'STEAL':'UPSET'}</span> <span style="font-size:.8rem;opacity:.8">${g.date}</span><div class="num">${fmt(g)}</div><div><b class="W">W ${g.result.jazz_pts}-${g.result.opp_pts}</b> · beat a ${g.tier} team (O/U ${g.opp_win_total})</div></div>`).join(''):'<p class="empty">No upsets yet. The wall is waiting.</p>';

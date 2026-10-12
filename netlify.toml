@@ -1,0 +1,3 @@
+[build]
+  publish = "."
+  command = "for f in og icon apple-touch-icon favicon; do base64 -d img/$f.b64 > $f.png; done"

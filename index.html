@@ -181,7 +181,7 @@ $('meter').insertAdjacentHTML('beforeend',`<div class="mk" style="left:0;border:
  else s+=`<text x="${x(0)+12}" y="${m.t+16}" style="font-size:13px;fill:#79A3DC">The actual line fills in once games are played.</text>`;
  $('netchart').innerHTML=s+'</svg>';
  const k=np?A[A.length-1][0]:0,f=v=>(v>0?'+':'')+v.toFixed(1);
- $('netnow').innerHTML=np?`After ${np} games · <b style="color:#79A3DC">Actual ${f(A[A.length-1][1])}</b> · <span style="color:#fff">45-win target ${f(Dz[k-1][1])}</span> · <span style="color:#B48AE6">Vegas expected ${f(E[k-1][1])}</span>`:`Full-season projection · <span style="color:#fff">45-win target ${f(rD)}</span> · <span style="color:#B48AE6">Vegas expected ${f(rE)}</span> (vs an average schedule)`;
+ $('netnow').innerHTML=np?`After ${np} games · <b style="color:#79A3DC">Actual ${f(A[A.length-1][1])}</b> · <span style="color:#fff">45-win target ${f(Dz[k-1][1])}</span> · <span style="color:#B48AE6">Vegas expected ${f(E[k-1][1])}</span>`:`Full-season projection vs the Jazz's ${n}-game schedule · <span style="color:#fff">45-win target ${f(Dz[n-1][1])}</span> · <span style="color:#B48AE6">Vegas expected ${f(E[n-1][1])}</span>`;
 })();
 // scorecard
 const EX={'MUST-WIN':'Home vs Peer teams, and any game vs Weak teams. A 45-win team takes care of these.','SWING':'Home vs Playoff teams, and road games vs Peer or Playoff teams. Coin flips; this is where 45 is won or lost.','STEAL':'Games vs Contenders. Nobody expects these, so every win is a bonus.'},PLAN={'MUST-WIN':'go 25-6','SWING':'go 17-19','STEAL':'go 3-10'};

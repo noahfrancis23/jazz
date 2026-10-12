@@ -106,6 +106,7 @@ footer .wm{justify-content:center;margin:0 0 10px}
  <section><h2>West Standings</h2><div style="overflow-x:auto"><table class="stand" id="stand"></table></div><p class="snote" id="snote"></p><p style="font-size:.85rem;opacity:.85;margin:10px 0 0"><b>Why 45 wins?</b> The top 6 seeds in the West make the playoffs outright; 7 through 10 go to the play-in. In recent seasons the West's 6th seed has usually finished in the mid-to-high 40s, so 45 wins puts the Jazz right in the race for a top-6 spot and comfortably in the play-in at worst.</p></section>
  <section><h2>Pace Chart</h2><div id="chart"></div>
   <div style="font-size:.8rem;opacity:.8">Sky blue = actual wins · dashed white = 45-win pace · dotted purple = 36.5 Vegas pace</div></section>
+ <section><h2>Net Rating Tracker</h2><p id="netnow" style="margin-top:0;font-size:.9rem"></p><div id="netchart"></div><div style="font-size:.8rem;opacity:.8">Sky blue = actual point differential per game · dashed white = what a 45-win team would average vs this schedule · dotted purple = what Vegas expects (36.5 wins) vs this schedule. Each opponent's strength comes from its Vegas win total (about 2.7 wins per point of net rating), with 1.25 points for home court. Lines shift with schedule strength: a stretch vs contenders pulls the targets down.</div></section>
  <section><h2>Circled Games Scorecard</h2><div class="defs" style="font-size:.85rem;line-height:1.5;margin:0 0 14px;opacity:.9"><b>How games are labeled</b> (opponent tier is set by its Vegas win total; see Opponent Tiers below):<br><b>MUST-WIN</b> · home vs Peer teams, or any game vs Weak teams<br><b>SWING</b> · home vs Playoff teams, or road vs Peer or Playoff teams<br><b>STEAL</b> · any game vs a Contender, home or road</div><div class="cards" id="cards"></div><p id="bank" style="font-size:.9rem;margin:12px 0 0"></p>
   <p style="font-size:.85rem;opacity:.8;margin-bottom:0"><b>The 45-win plan:</b> go 25-6 in MUST-WIN games, 17-19 in SWING games, and 3-10 in STEAL games. That's 45 wins. Every MUST-WIN dropped has to be made up with an extra SWING or STEAL win. (2 NBA Cup games are still TBD and not counted yet.)</p></section>
  <section><h2>Next Must-Win Game</h2><div id="next"></div></section>
@@ -163,6 +164,25 @@ $('meter').insertAdjacentHTML('beforeend',`<div class="mk" style="left:0;border:
  pts.slice(1).forEach(p=>s+=`<circle cx="${x(p[0])}" cy="${y(p[1])}" r="4" fill="#79A3DC"/>`);
  if(!P.length)s+=`<text x="${x(0)+12}" y="${y(46)}" style="font-size:13px;fill:#79A3DC">Tip-off Oct 21. The sky blue line fills in as games are played.</text>`;
  $('chart').innerHTML=s+'</svg>'})();
+// net rating chart
+(function(){const R=wt=>(wt-41)/2.7,HCA=1.25,rE=R(D.vegas),rD=R(D.goal);
+ const GG=G.filter(g=>g.opp_win_total!=null&&g.opp_win_total!=='');const n=GG.length;
+ let se=0,sd=0,sa=0,np=0;const E=[],Dz=[],A=[];
+ GG.forEach((g,i)=>{const adj=-R(+g.opp_win_total)+(g.home?HCA:-HCA);se+=rE+adj;sd+=rD+adj;E.push([i+1,se/(i+1)]);Dz.push([i+1,sd/(i+1)]);
+  if(g.result){np++;sa+=g.result.jazz_pts-g.result.opp_pts;A.push([i+1,sa/np])}});
+ const all=[...E,...Dz,...A].map(p=>p[1]);let lo=Math.floor(Math.min(-6,...all)),hi=Math.ceil(Math.max(6,...all));
+ const w=700,h=300,m={l:34,r:12,t:12,b:26},x=k=>m.l+k/n*(w-m.l-m.r),y=v=>m.t+(hi-v)/(hi-lo)*(h-m.t-m.b);
+ let s=`<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="Net rating">`;
+ for(let v=Math.ceil(lo/2)*2;v<=hi;v+=2)s+=`<line x1="${m.l}" x2="${w-m.r}" y1="${y(v)}" y2="${y(v)}" stroke="${v===0?'#ffffff55':'#ffffff1a'}"/><text x="4" y="${y(v)+4}">${v>0?'+'+v:v}</text>`;
+ for(let k=0;k<=80;k+=20)s+=`<text x="${x(k)-6}" y="${h-8}">${k}</text>`;
+ const pl=(pts,c,d,wd)=>`<polyline fill="none" stroke="${c}" stroke-width="${wd}" ${d?`stroke-dasharray="${d}"`:''} points="${pts.map(p=>x(p[0])+','+y(p[1])).join(' ')}"/>`;
+ s+=pl(Dz,'#fff','6 5',2)+pl(E,'#B48AE6','3 4',2);
+ if(A.length){s+=pl(A,'#79A3DC','',4);A.forEach(p=>s+=`<circle cx="${x(p[0])}" cy="${y(p[1])}" r="3" fill="#79A3DC"/>`)}
+ else s+=`<text x="${x(0)+12}" y="${m.t+16}" style="font-size:13px;fill:#79A3DC">The actual line fills in once games are played.</text>`;
+ $('netchart').innerHTML=s+'</svg>';
+ const k=np?A[A.length-1][0]:0,f=v=>(v>0?'+':'')+v.toFixed(1);
+ $('netnow').innerHTML=np?`After ${np} games · <b style="color:#79A3DC">Actual ${f(A[A.length-1][1])}</b> · <span style="color:#fff">45-win target ${f(Dz[k-1][1])}</span> · <span style="color:#B48AE6">Vegas expected ${f(E[k-1][1])}</span>`:`Full-season projection · <span style="color:#fff">45-win target ${f(rD)}</span> · <span style="color:#B48AE6">Vegas expected ${f(rE)}</span> (vs an average schedule)`;
+})();
 // scorecard
 const EX={'MUST-WIN':'Home vs Peer teams, and any game vs Weak teams. A 45-win team takes care of these.','SWING':'Home vs Playoff teams, and road games vs Peer or Playoff teams. Coin flips; this is where 45 is won or lost.','STEAL':'Games vs Contenders. Nobody expects these, so every win is a bonus.'},PLAN={'MUST-WIN':'go 25-6','SWING':'go 17-19','STEAL':'go 3-10'};
 const fmt=g=>`${g.home?'vs':'@'} ${g.opponent}`;

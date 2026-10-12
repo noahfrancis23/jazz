@@ -155,12 +155,12 @@ $('meter').insertAdjacentHTML('beforeend',`<div class="mk" style="left:0;border:
  let s=`<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="Wins vs pace">`;
  for(let v=0;v<=50;v+=10)s+=`<line x1="${m.l}" x2="${w-m.r}" y1="${y(v)}" y2="${y(v)}" stroke="#ffffff1a"/><text x="4" y="${y(v)+4}">${v}</text>`;
  for(let n=0;n<=80;n+=20)s+=`<text x="${x(n)-6}" y="${h-8}">${n}</text>`;
- s+=`<line x1="${x(0)}" y1="${y(0)}" x2="${x(N)}" y2="${y(45)}" stroke="#fff" stroke-width="2" stroke-dasharray="6 5"/><text x="${x(N)-60}" y="${y(45)-6}" style="fill:#fff">45 pace</text>`;
- s+=`<line x1="${x(0)}" y1="${y(0)}" x2="${x(N)}" y2="${y(36.5)}" stroke="#B48AE6" stroke-width="2" stroke-dasharray="3 4"/><text x="${x(N)-60}" y="${y(36.5)+16}" style="fill:#B48AE6">36.5 pace</text>`;
+ s+=`<line x1="${x(0)}" y1="${y(0)}" x2="${x(N)}" y2="${y(45)}" stroke="#fff" stroke-width="2" stroke-dasharray="6 5"/><text x="${x(N)}" y="${y(45)-10}" text-anchor="end" style="fill:#fff">45-win pace</text>`;
+ s+=`<line x1="${x(0)}" y1="${y(0)}" x2="${x(N)}" y2="${y(36.5)}" stroke="#B48AE6" stroke-width="2" stroke-dasharray="3 4"/><text x="${x(N)}" y="${y(36.5)+24}" text-anchor="end" style="fill:#B48AE6">Vegas 36.5 pace</text>`;
  let c=0,pts=[[0,0]];P.forEach((g,i)=>{c+=g.result.w;pts.push([i+1,c])});
  s+=`<polyline fill="none" stroke="#79A3DC" stroke-width="4" points="${pts.map(p=>x(p[0])+','+y(p[1])).join(' ')}"/>`;
  pts.slice(1).forEach(p=>s+=`<circle cx="${x(p[0])}" cy="${y(p[1])}" r="4" fill="#79A3DC"/>`);
- if(!P.length)s+=`<text x="${w/2-80}" y="${h/2}" style="font-size:15px;fill:#79A3DC">Tip-off Oct 21. Line fills in as games are played.</text>`;
+ if(!P.length)s+=`<text x="${x(0)+12}" y="${y(46)}" style="font-size:13px;fill:#79A3DC">Tip-off Oct 21. The sky blue line fills in as games are played.</text>`;
  $('chart').innerHTML=s+'</svg>'})();
 // scorecard
 const EX={'MUST-WIN':'Home vs Peer teams, and any game vs Weak teams. A 45-win team takes care of these.','SWING':'Home vs Playoff teams, and road games vs Peer or Playoff teams. Coin flips; this is where 45 is won or lost.','STEAL':'Games vs Contenders. Nobody expects these, so every win is a bonus.'},PLAN={'MUST-WIN':'go 25-6','SWING':'go 17-19','STEAL':'go 3-10'};

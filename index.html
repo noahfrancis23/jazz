@@ -165,7 +165,7 @@ $('meter').insertAdjacentHTML('beforeend',`<div class="mk" style="left:0;border:
 // scorecard
 const EX={'MUST-WIN':'Home vs Peer teams, and any game vs Weak teams. A 45-win team takes care of these.','SWING':'Home vs Playoff teams, and road games vs Peer or Playoff teams. Coin flips; this is where 45 is won or lost.','STEAL':'Games vs Contenders. Nobody expects these, so every win is a bonus.'},PLAN={'MUST-WIN':'go 25-6','SWING':'go 17-19','STEAL':'go 3-10'};
 $('cards').innerHTML=['MUST-WIN','SWING','STEAL'].map(k=>{const all=G.filter(g=>g.category===k),p=all.filter(g=>g.result),w=p.filter(g=>g.result.w).length;
- return `<div class="card c-${k}"><span class="tag t-${k}">${k}</span><div class="num">${w}-${p.length-w}</div><div style="font-size:.8rem;opacity:.75">${all.length} games · ${all.length-p.length} left · plan: ${PLAN[k]}</div><p>${EX[k]}</p></div>`}).join('');
+ return `<div class="card c-${k}"><span class="tag t-${k}">${k}</span><div class="num">${w}-${p.length-w}</div><div style="font-size:.8rem;opacity:.75">${all.length} games · ${all.length-p.length} left · plan: ${PLAN[k]}</div><p>${EX[k]}</p><div style="font-size:.75rem;color:var(--sky);margin-top:6px">Tap to see games ›</div></div>`}).join('');
 // next circled game
 const fmt=g=>`${g.home?'vs':'@'} ${g.opponent}`;
 function card(id,nxt,label,cdid){
@@ -194,6 +194,7 @@ function sched(){ $('filters').innerHTML=cats.map(c=>`<button class="${c===filt?
   return `<div class="g c-${g.category}" id="g${g.game_no}"><div class="no"><b style="color:#fff;display:block">${new Date(g.date+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}</b>${g.tip_mt}</div><div><div class="opp">${fmt(g)} <span class="tag t-${g.category}">${g.category}</span>${g.b2b?'<span class="pill">B2B</span>':''}${g.west_peer?'<span class="pill">WEST PEER</span>':''}${r&&r.upset?'<span class="pill" style="border-color:#79A3DC;color:#79A3DC">UPSET</span>':''}</div><div class="meta">${g.day} · Game ${g.game_no} · ${g.tier} · O/U ${g.opp_win_total}${g.notes&&!g.b2b&&!g.west_peer?' · '+g.notes:g.notes.includes('road trip')?' · road trip':''}</div></div><div class="res">${r?`<span class="${r.w?'W':'L'}">${r.w?'W':'L'}</span> ${r.jazz_pts}-${r.opp_pts}`:'<span style="opacity:.4">—</span>'}</div></div>`}).join('');
  document.querySelectorAll('#filters button').forEach(b=>b.onclick=()=>{filt=b.dataset.c;sched()})}
 sched();
+document.querySelectorAll('#cards .card').forEach(c=>{const k=[...c.classList].find(x=>x.startsWith('c-')).slice(2);c.style.cursor='pointer';c.title='Show these games in the schedule';c.onclick=()=>{filt=k;sched();$('filters').scrollIntoView({behavior:'smooth',block:'start'})}});
 $('tbdnote').textContent=`${G.length} of ${N} games listed; ${D.tbd_games} NBA Cup games are TBD. Times are Mountain.`;
 $('upd').textContent=new Date(D.updated).toLocaleString('en-US',{timeZone:'America/Denver',dateStyle:'medium',timeStyle:'short'})+' MT';
 // confetti if most recent game was an upset

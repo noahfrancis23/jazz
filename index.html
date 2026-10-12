@@ -113,11 +113,11 @@ footer .wm{justify-content:center;margin:0 0 10px}
   <p style="font-size:.8rem;opacity:.7;margin-bottom:0" id="tbdnote"></p></section>
  <section><h2>Opponent Tiers</h2><div class="legend">
   <div><b>Contender</b> · Vegas total 50+<br>OKC, San Antonio, New York, Boston, Philadelphia</div>
-  <div><b>Good</b> · 44 to 49.5<br>Playoff teams. Winnable at home, tough on the road.</div>
+  <div><b>Playoff</b> · 44 to 49.5<br>Playoff teams. Winnable at home, tough on the road.</div>
   <div><b>Peer</b> · 31.5 to 43.5<br>Teams near the Jazz (36.5). Head-to-head wins matter most here.</div>
   <div><b>Weak</b> · under 31.5<br>Lottery teams. Losing these hurts.</div>
  </div>
- <p style="font-size:.85rem;opacity:.8;margin-bottom:0">Tags: <span class="pill">B2B</span> second night of a back-to-back · <span class="pill">WEST PEER</span> West rival for tiebreakers and the play-in · Upset = any STEAL win, or a win over a Good/Contender team (higher tier than the Jazz).</p></section>
+ <p style="font-size:.85rem;opacity:.8;margin-bottom:0">Tags: <span class="pill">B2B</span> second night of a back-to-back · <span class="pill">WEST PEER</span> West rival for tiebreakers and the play-in · Upset = any STEAL win, or a win over a Playoff/Contender team (higher tier than the Jazz).</p></section>
 </main>
 <footer><div class="wm">UTAH JAZZ <b>·</b> TAKE NOTE</div>Unofficial fan tracker. Win totals: DraftKings preseason.<br>Last updated: <span id="upd"></span></footer>
 <canvas id="confetti"></canvas><div id="banner"><div>🚨 UPSET ALERT 🚨<small id="bannerSub"></small></div></div>
@@ -160,7 +160,7 @@ $('meter').insertAdjacentHTML('beforeend',`<div class="mk" style="left:0;border:
  if(!P.length)s+=`<text x="${w/2-80}" y="${h/2}" style="font-size:15px;fill:#79A3DC">Tip-off Oct 21. Line fills in as games are played.</text>`;
  $('chart').innerHTML=s+'</svg>'})();
 // scorecard
-const EX={'MUST-WIN':'Home games vs Peer or Weak teams. These are the ones you just can\'t drop.','SWING':'Home vs Good teams, or road games vs Peers. Coin flips; winning more than half is how you beat Vegas.','STEAL':'Games vs Contenders. Nobody expects these, so every win is a bonus.'},PLAN={'MUST-WIN':'win all','SWING':'win half','STEAL':'win 3'};
+const EX={'MUST-WIN':'Home games vs Peer or Weak teams. These are the ones you just can\'t drop.','SWING':'Home vs Playoff teams, or road games vs Peers. Coin flips; winning more than half is how you beat Vegas.','STEAL':'Games vs Contenders. Nobody expects these, so every win is a bonus.'},PLAN={'MUST-WIN':'win all','SWING':'win half','STEAL':'win 3'};
 $('cards').innerHTML=['MUST-WIN','SWING','STEAL'].map(k=>{const all=G.filter(g=>g.category===k),p=all.filter(g=>g.result),w=p.filter(g=>g.result.w).length;
  return `<div class="card c-${k}"><span class="tag t-${k}">${k}</span><div class="num">${w}-${p.length-w}</div><div style="font-size:.8rem;opacity:.75">${all.length} games · ${all.length-p.length} left · plan: ${PLAN[k]}</div><p>${EX[k]}</p></div>`}).join('');
 // next circled game

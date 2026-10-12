@@ -102,14 +102,14 @@ footer .wm{justify-content:center;margin:0 0 10px}
 </header>
 <main class="wrap">
  <section><h2>Next Game</h2><div id="nextany"></div></section>
- <section><h2>West Standings</h2><div style="overflow-x:auto"><table class="stand" id="stand"></table></div><p class="snote" id="snote"></p></section>
+ <section><h2>West Standings</h2><div style="overflow-x:auto"><table class="stand" id="stand"></table></div><p class="snote" id="snote"></p><p style="font-size:.85rem;opacity:.85;margin:10px 0 0"><b>Why 45 wins?</b> The top 6 seeds in the West make the playoffs outright; 7 through 10 go to the play-in. In recent seasons the West's 6th seed has usually finished in the mid-to-high 40s, so 45 wins puts the Jazz right in the race for a top-6 spot and comfortably in the play-in at worst.</p></section>
  <section><h2>Pace Chart</h2><div id="chart"></div>
   <div style="font-size:.8rem;opacity:.8">Sky blue = actual wins · dashed white = 45-win pace · dotted purple = 36.5 Vegas pace</div></section>
- <section><h2>Circled Games Scorecard</h2><div class="defs" style="font-size:.85rem;line-height:1.5;margin:0 0 14px;opacity:.9"><b>How games are labeled</b> (opponent tier is set by its Vegas win total; see Opponent Tiers below):<br><b>MUST-WIN</b> · home vs Peer or Weak teams<br><b>SWING</b> · home vs Playoff teams, or road vs Peer teams<br><b>STEAL</b> · any game vs a Contender, home or road<br><b>OTHER</b> · road vs Playoff or Weak teams</div><div class="cards" id="cards"></div>
-  <p style="font-size:.85rem;opacity:.8;margin-bottom:0">The baseline plan (sweep MUST-WIN, split SWING, steal 3) gets to about 37 wins. Getting to 45 means beating it by ~8.</p></section>
- <section><h2>Next Circled Game</h2><div id="next"></div></section>
+ <section><h2>Circled Games Scorecard</h2><div class="defs" style="font-size:.85rem;line-height:1.5;margin:0 0 14px;opacity:.9"><b>How games are labeled</b> (opponent tier is set by its Vegas win total; see Opponent Tiers below):<br><b>MUST-WIN</b> · home vs Peer teams, or any game vs Weak teams<br><b>SWING</b> · home vs Playoff teams, or road vs Peer or Playoff teams<br><b>STEAL</b> · any game vs a Contender, home or road</div><div class="cards" id="cards"></div>
+  <p style="font-size:.85rem;opacity:.8;margin-bottom:0"><b>The 45-win plan:</b> go 25-6 in MUST-WIN games, 17-19 in SWING games, and 3-10 in STEAL games. That's 45 wins. Every MUST-WIN dropped has to be made up with an extra SWING or STEAL win. (2 NBA Cup games are still TBD and not counted yet.)</p></section>
+ <section><h2>Next Must-Win Game</h2><div id="next"></div></section>
  <section><h2>Upset Alert Wall</h2><div class="wall" id="wall"></div></section>
- <section><h2>Full Schedule</h2><div class="defs" style="font-size:.85rem;line-height:1.5;margin:0 0 14px;opacity:.9"><b>How games are labeled</b> (opponent tier is set by its Vegas win total; see Opponent Tiers below):<br><b>MUST-WIN</b> · home vs Peer or Weak teams<br><b>SWING</b> · home vs Playoff teams, or road vs Peer teams<br><b>STEAL</b> · any game vs a Contender, home or road<br><b>OTHER</b> · road vs Playoff or Weak teams</div>
+ <section><h2>Full Schedule</h2><div class="defs" style="font-size:.85rem;line-height:1.5;margin:0 0 14px;opacity:.9"><b>How games are labeled</b> (opponent tier is set by its Vegas win total; see Opponent Tiers below):<br><b>MUST-WIN</b> · home vs Peer teams, or any game vs Weak teams<br><b>SWING</b> · home vs Playoff teams, or road vs Peer or Playoff teams<br><b>STEAL</b> · any game vs a Contender, home or road</div>
   <div class="filters" id="filters"></div>
   <div class="sched" id="sched"></div>
   <p style="font-size:.8rem;opacity:.7;margin-bottom:0" id="tbdnote"></p></section>
@@ -163,7 +163,7 @@ $('meter').insertAdjacentHTML('beforeend',`<div class="mk" style="left:0;border:
  if(!P.length)s+=`<text x="${w/2-80}" y="${h/2}" style="font-size:15px;fill:#79A3DC">Tip-off Oct 21. Line fills in as games are played.</text>`;
  $('chart').innerHTML=s+'</svg>'})();
 // scorecard
-const EX={'MUST-WIN':'Home games vs Peer or Weak teams. These are the ones you just can\'t drop.','SWING':'Home vs Playoff teams, or road games vs Peers. Coin flips; winning more than half is how you beat Vegas.','STEAL':'Games vs Contenders. Nobody expects these, so every win is a bonus.'},PLAN={'MUST-WIN':'win all','SWING':'win half','STEAL':'win 3'};
+const EX={'MUST-WIN':'Home vs Peer teams, and any game vs Weak teams. A 45-win team takes care of these.','SWING':'Home vs Playoff teams, and road games vs Peer or Playoff teams. Coin flips; this is where 45 is won or lost.','STEAL':'Games vs Contenders. Nobody expects these, so every win is a bonus.'},PLAN={'MUST-WIN':'go 25-6','SWING':'go 17-19','STEAL':'go 3-10'};
 $('cards').innerHTML=['MUST-WIN','SWING','STEAL'].map(k=>{const all=G.filter(g=>g.category===k),p=all.filter(g=>g.result),w=p.filter(g=>g.result.w).length;
  return `<div class="card c-${k}"><span class="tag t-${k}">${k}</span><div class="num">${w}-${p.length-w}</div><div style="font-size:.8rem;opacity:.75">${all.length} games · ${all.length-p.length} left · plan: ${PLAN[k]}</div><p>${EX[k]}</p></div>`}).join('');
 // next circled game
@@ -172,7 +172,7 @@ function card(id,nxt,label,cdid){
 if(!nxt){$(id).innerHTML='<p class="empty">No '+label+' left.</p>';return}
 $(id).innerHTML=`<div class="next"><div><span class="tag t-${nxt.category}">${nxt.category}</span><div class="num" style="font-size:2.2rem;margin-top:6px">${fmt(nxt)}</div><div style="color:#ffffffcc;font-size:.88rem">Game ${nxt.game_no} · ${nxt.day} ${new Date(nxt.date+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${nxt.tip_mt} MT · ${nxt.tier} (O/U ${nxt.opp_win_total})</div></div><div class="cd" id="${cdid}"></div></div>`;
 const tick=()=>{let t=Math.max(0,new Date(nxt.tip_iso)-new Date())/1000;const u=[[86400,'DAYS'],[3600,'HRS'],[60,'MIN'],[1,'SEC']].map(([d,l])=>{const v=Math.floor(t/d);t-=v*d;return `<div><div class="num">${String(v).padStart(2,'0')}</div><small>${l}</small></div>`});$(cdid).innerHTML=u.join('')};tick();setInterval(tick,1000)}
-card('next',G.find(g=>!g.result&&g.category!=='OTHER'&&new Date(g.tip_iso)>new Date()),'circled games','cd');
+card('next',G.find(g=>!g.result&&g.category==='MUST-WIN'&&new Date(g.tip_iso)>new Date()),'must-win games','cd');
 card('nextany',G.find(g=>!g.result&&new Date(g.tip_iso)>new Date()),'games','cd2');
 // playoff picture
 (()=>{const T=((D.standings||{}).teams||[]).slice().sort((a,b)=>a.seed-b.seed);if(T.length<10){$('bracket').innerHTML='<p class="empty">Standings not available yet.</p>';return}
@@ -188,7 +188,7 @@ $('jzline').innerHTML=pre?'':ji<=6?`If the season ended today, the Jazz are the 
 const ups=P.filter(g=>g.result.upset);
 $('wall').innerHTML=ups.length?ups.slice().reverse().map(g=>`<div class="up"><span class="tag t-${g.category}">${g.category==='STEAL'?'STEAL':'UPSET'}</span> <span style="font-size:.8rem;opacity:.8">${g.date}</span><div class="num">${fmt(g)}</div><div><b class="W">W ${g.result.jazz_pts}-${g.result.opp_pts}</b> · beat a ${g.tier} team (O/U ${g.opp_win_total})</div></div>`).join(''):'<p class="empty">No upsets yet. The wall is waiting.</p>';
 // schedule
-let filt='ALL';const cats=['ALL','MUST-WIN','SWING','STEAL','OTHER'];
+let filt='ALL';const cats=['ALL','MUST-WIN','SWING','STEAL'];
 function sched(){ $('filters').innerHTML=cats.map(c=>`<button class="${c===filt?'on':''}" data-c="${c}">${c}</button>`).join('');
  $('sched').innerHTML=G.filter(g=>filt==='ALL'||g.category===filt).map(g=>{const r=g.result;
   return `<div class="g c-${g.category}" id="g${g.game_no}"><div class="no"><b style="color:#fff;display:block">${new Date(g.date+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}</b>${g.tip_mt}</div><div><div class="opp">${fmt(g)} <span class="tag t-${g.category}">${g.category}</span>${g.b2b?'<span class="pill">B2B</span>':''}${g.west_peer?'<span class="pill">WEST PEER</span>':''}${r&&r.upset?'<span class="pill" style="border-color:#79A3DC;color:#79A3DC">UPSET</span>':''}</div><div class="meta">${g.day} · Game ${g.game_no} · ${g.tier} · O/U ${g.opp_win_total}${g.notes&&!g.b2b&&!g.west_peer?' · '+g.notes:g.notes.includes('road trip')?' · road trip':''}</div></div><div class="res">${r?`<span class="${r.w?'W':'L'}">${r.w?'W':'L'}</span> ${r.jazz_pts}-${r.opp_pts}`:'<span style="opacity:.4">—</span>'}</div></div>`}).join('');

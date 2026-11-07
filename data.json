@@ -7,148 +7,148 @@
  "tbd_games": 2,
  "demo": false,
  "standings": {
-  "source": "seed",
-  "note": "Season starts Oct 21",
-  "fetched": null,
+  "source": "ESPN",
+  "note": "",
+  "fetched": "2026-11-06T20:53-07:00",
   "teams": [
    {
     "seed": 1,
-    "team": "Dallas Mavericks",
-    "w": 0,
-    "l": 0,
+    "team": "Portland Trail Blazers",
+    "w": 6,
+    "l": 1,
     "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "l10": "6-1",
+    "streak": "W3"
    },
    {
     "seed": 2,
-    "team": "Denver Nuggets",
-    "w": 0,
-    "l": 0,
+    "team": "Los Angeles Lakers",
+    "w": 7,
+    "l": 2,
     "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "l10": "7-2",
+    "streak": "W3"
    },
    {
     "seed": 3,
-    "team": "Golden State Warriors",
-    "w": 0,
-    "l": 0,
+    "team": "Houston Rockets",
+    "w": 7,
+    "l": 2,
     "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "l10": "7-2",
+    "streak": "L1"
    },
    {
     "seed": 4,
-    "team": "Houston Rockets",
-    "w": 0,
-    "l": 0,
+    "team": "Oklahoma City Thunder",
+    "w": 7,
+    "l": 2,
     "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "l10": "7-2",
+    "streak": "W3"
    },
    {
     "seed": 5,
-    "team": "LA Clippers",
-    "w": 0,
-    "l": 0,
-    "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "team": "San Antonio Spurs",
+    "w": 6,
+    "l": 2,
+    "gb": "0.5",
+    "l10": "6-2",
+    "streak": "W6"
    },
    {
     "seed": 6,
-    "team": "Los Angeles Lakers",
-    "w": 0,
-    "l": 0,
-    "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "team": "Minnesota Timberwolves",
+    "w": 7,
+    "l": 3,
+    "gb": "0.5",
+    "l10": "7-3",
+    "streak": "W3"
    },
    {
     "seed": 7,
     "team": "Memphis Grizzlies",
-    "w": 0,
-    "l": 0,
-    "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "w": 6,
+    "l": 3,
+    "gb": "1",
+    "l10": "6-3",
+    "streak": "L3"
    },
    {
     "seed": 8,
-    "team": "Minnesota Timberwolves",
-    "w": 0,
-    "l": 0,
-    "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "team": "Golden State Warriors",
+    "w": 6,
+    "l": 3,
+    "gb": "1",
+    "l10": "6-3",
+    "streak": "W6"
    },
    {
     "seed": 9,
-    "team": "New Orleans Pelicans",
-    "w": 0,
-    "l": 0,
-    "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "team": "Denver Nuggets",
+    "w": 4,
+    "l": 3,
+    "gb": "2",
+    "l10": "4-3",
+    "streak": "W1"
    },
    {
     "seed": 10,
-    "team": "Oklahoma City Thunder",
-    "w": 0,
-    "l": 0,
-    "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "team": "Dallas Mavericks",
+    "w": 5,
+    "l": 4,
+    "gb": "2",
+    "l10": "5-4",
+    "streak": "W1"
    },
    {
     "seed": 11,
-    "team": "Phoenix Suns",
-    "w": 0,
-    "l": 0,
-    "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "team": "New Orleans Pelicans",
+    "w": 4,
+    "l": 5,
+    "gb": "3",
+    "l10": "4-5",
+    "streak": "L1"
    },
    {
     "seed": 12,
-    "team": "Portland Trail Blazers",
-    "w": 0,
-    "l": 0,
-    "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "team": "Phoenix Suns",
+    "w": 2,
+    "l": 5,
+    "gb": "4",
+    "l10": "2-5",
+    "streak": "W1"
    },
    {
     "seed": 13,
-    "team": "Sacramento Kings",
-    "w": 0,
-    "l": 0,
-    "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "team": "LA Clippers",
+    "w": 1,
+    "l": 7,
+    "gb": "5.5",
+    "l10": "1-7",
+    "streak": "L7"
    },
    {
     "seed": 14,
-    "team": "San Antonio Spurs",
-    "w": 0,
-    "l": 0,
-    "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "team": "Sacramento Kings",
+    "w": 1,
+    "l": 7,
+    "gb": "5.5",
+    "l10": "1-7",
+    "streak": "L1"
    },
    {
     "seed": 15,
     "team": "Utah Jazz",
-    "w": 0,
-    "l": 0,
-    "gb": "-",
-    "l10": "0-0",
-    "streak": "-"
+    "w": 1,
+    "l": 8,
+    "gb": "6",
+    "l10": "1-8",
+    "streak": "L7"
    }
   ]
  },
- "updated": "2026-10-12T14:11-06:00",
+ "updated": "2026-11-06T20:53-07:00",
  "games": [
   {
    "game_no": 1,
@@ -165,7 +165,12 @@
    "b2b": false,
    "west_peer": false,
    "notes": "",
-   "result": null
+   "result": {
+    "w": false,
+    "jazz_pts": 103,
+    "opp_pts": 123,
+    "upset": false
+   }
   },
   {
    "game_no": 2,
@@ -182,7 +187,12 @@
    "b2b": false,
    "west_peer": false,
    "notes": "",
-   "result": null
+   "result": {
+    "w": true,
+    "jazz_pts": 120,
+    "opp_pts": 119,
+    "upset": false
+   }
   },
   {
    "game_no": 3,
@@ -199,7 +209,12 @@
    "b2b": false,
    "west_peer": false,
    "notes": "",
-   "result": null
+   "result": {
+    "w": false,
+    "jazz_pts": 123,
+    "opp_pts": 132,
+    "upset": false
+   }
   },
   {
    "game_no": 4,
@@ -216,7 +231,12 @@
    "b2b": true,
    "west_peer": false,
    "notes": "B2B 2nd night",
-   "result": null
+   "result": {
+    "w": false,
+    "jazz_pts": 105,
+    "opp_pts": 110,
+    "upset": false
+   }
   },
   {
    "game_no": 5,
@@ -233,7 +253,12 @@
    "b2b": false,
    "west_peer": false,
    "notes": "",
-   "result": null
+   "result": {
+    "w": false,
+    "jazz_pts": 111,
+    "opp_pts": 117,
+    "upset": false
+   }
   },
   {
    "game_no": 6,
@@ -250,7 +275,12 @@
    "b2b": false,
    "west_peer": true,
    "notes": "West peer: tiebreaker/play-in",
-   "result": null
+   "result": {
+    "w": false,
+    "jazz_pts": 90,
+    "opp_pts": 112,
+    "upset": false
+   }
   },
   {
    "game_no": 7,
@@ -267,7 +297,12 @@
    "b2b": false,
    "west_peer": false,
    "notes": "4-game road trip",
-   "result": null
+   "result": {
+    "w": false,
+    "jazz_pts": 97,
+    "opp_pts": 119,
+    "upset": false
+   }
   },
   {
    "game_no": 8,
@@ -284,7 +319,12 @@
    "b2b": false,
    "west_peer": false,
    "notes": "4-game road trip",
-   "result": null
+   "result": {
+    "w": false,
+    "jazz_pts": 113,
+    "opp_pts": 120,
+    "upset": false
+   }
   },
   {
    "game_no": 9,
@@ -301,7 +341,12 @@
    "b2b": false,
    "west_peer": false,
    "notes": "4-game road trip",
-   "result": null
+   "result": {
+    "w": false,
+    "jazz_pts": 100,
+    "opp_pts": 112,
+    "upset": false
+   }
   },
   {
    "game_no": 10,
